@@ -39,9 +39,14 @@ namespace AlfaRobot.ARobotScript.Compiler
         public const string ERR_UNKN_COMMAND = "Неизвестная команда.";
 
         /// <summary>
-        /// Текст ошибки "Неправильный формат команды".
+        /// Текст ошибки "Неправильный формат команды 1".
         /// </summary>
         public const string ERR_CMD_FORMAT_OP_BRACK = "Неправильный формат команды. После имени команды обязательна открывающая скобка.";
+
+        /// <summary>
+        /// Текст ошибки "Неправильный формат команды 2".
+        /// </summary>
+        public const string ERR_CMD_FORMAT_CLS_BRACK = "Неправильный формат команды. Необходима заккрывающая скобка.";
 
         /// <summary>
         /// Текст ошибки "Скрипт не содержит команд".

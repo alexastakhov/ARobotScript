@@ -35,9 +35,10 @@ namespace AlfaRobot.ARobotScript.Compiler
 
             var isTextBlock = false;
             var isAgruments = false;
+            var argumentIndex = -1;
 
-            string currentCommandName;
-            CommandArgument[] currentCommandArguments;
+            var currentCommandName = string.Empty;
+            CommandArgument[] currentCommandArguments = null;
 
             try
             {
@@ -69,7 +70,13 @@ namespace AlfaRobot.ARobotScript.Compiler
                 {
                     index = GetNextCharIndex(currStr, index);
 
-                    if (!isAgruments && currStr.Length > index && index >= 0)
+                    // Пустая строка
+                    if (index < 0)
+                    {
+                        continue;
+                    }
+
+                    if (!isAgruments && currStr.Length > index)
                     {
                         // Строка с комментарием
                         if (currStr.Substring(index, currStr.Length - index).StartsWith("#"))
@@ -99,10 +106,23 @@ namespace AlfaRobot.ARobotScript.Compiler
                         }
 
                         index++;
-
-                        // Разбор аргументов
-                        index = GetNextCharIndex(currStr, index);
                         currentCommandArguments = GetCommandArguments(currentCommandName);
+
+                        // Определяем количество аргументов
+                        if (currentCommandArguments.Length > 0)
+                        {
+                            argumentIndex = 0;
+                        }
+                        else if (currStr.Length == index || currStr[index] != ')')
+                        {
+                            errors.Add(new ErrorRecord(StringConst.ERR_CMD_FORMAT_OP_BRACK, rowNumber, index));
+
+                            continue;
+                        }
+                        else
+                        {
+                            continue;
+                        }
 
                         // Аргументы с новой строки
                         if (currStr.Length == index)
@@ -111,45 +131,55 @@ namespace AlfaRobot.ARobotScript.Compiler
 
                             continue;
                         }
+                    }
 
-                        for (var i = 0; i < currentCommandArguments.Length; i++)
+                    // Разбор аргументов
+                    index = GetNextCharIndex(currStr, index);
+
+                    for (; argumentIndex < currentCommandArguments.Length; argumentIndex++)
+                    {
+                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.BOOL)
                         {
-                            if (currentCommandArguments[i].ValueType == ArgType.BOOL)
+                            int value = -1;
+
+                            int.TryParse(currStr[index].ToString(), out value);
+
+                            if (value >= 0)
                             {
-                                int value = -1;
-
-                                int.TryParse(currStr[index].ToString(), out value);
-
-                                if (value == -1)
-                                {
-                                    errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_BOOL, rowNumber, index));
-                                }
+                                errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_BOOL, rowNumber, index));
                             }
+                        }
 
-                            if (currentCommandArguments[i].ValueType == ArgType.STRING)
+                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.STRING)
+                        {
+                            if (currStr[index] != '\"')
                             {
-                                if (currStr[index] != '\"')
-                                {
-                                    errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_STRING_OP, rowNumber, index));
-                                }
+                                errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_STRING_OP, rowNumber, index));
                             }
+                        }
 
-                            if (currentCommandArguments[i].ValueType == ArgType.INT)
+                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.INT)
+                        {
+                            int value = -1;
+
+                            int.TryParse(currStr[index].ToString(), out value);
+
+                            if (value == -1)
                             {
-                                int value = -1;
-
-                                int.TryParse(currStr[index].ToString(), out value);
-
-                                if (value == -1)
-                                {
-                                    errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_INT, rowNumber, index));
-                                }
+                                errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_INT, rowNumber, index));
                             }
+                        }
 
-                            if (currentCommandArguments[i].ValueType == ArgType.STR_ARR)
-                            {
+                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.STR_ARR)
+                        {
 
-                            }
+                        }
+
+                        if (currStr.Length == index)
+                        {
+                            isAgruments = true;
+
+                            break;
                         }
                     }
                 }
