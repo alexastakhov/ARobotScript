@@ -17,6 +17,11 @@ namespace AlfaRobot.ARobotScript.Commands
         STRING,
 
         /// <summary>
+        /// Строковый тип имени модуля, содержащий разделяющий слэш.
+        /// </summary>
+        N_STRING,
+
+        /// <summary>
         /// Булевский тип.
         /// </summary>
         BOOL,
@@ -25,6 +30,11 @@ namespace AlfaRobot.ARobotScript.Commands
         /// Массив строк.
         /// </summary>
         STR_ARR,
+
+        /// <summary>
+        /// Массив имен модулей, содержащих разделяющий слэш.
+        /// </summary>
+        N_STR_ARR,
 
         /// <summary>
         /// Целый тип.

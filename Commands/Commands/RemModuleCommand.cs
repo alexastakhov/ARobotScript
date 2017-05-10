@@ -21,7 +21,7 @@ namespace AlfaRobot.ARobotScript.Commands.Commands
         /// </summary>
         private static readonly CommandArgument[] arguments = new CommandArgument[]
         {
-            new CommandArgument("siteNameSlashModuleName", ArgType.STRING, "Имя модуля в формате Сайт/Модуль")
+            new CommandArgument("siteNameSlashModuleName", ArgType.N_STRING, "Имя модуля в формате Сайт/Модуль")
         };
 
         /// <summary>

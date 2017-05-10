@@ -61,7 +61,8 @@ namespace AlfaRobot.ARobotScript.Compiler
                 return new CompileResult(programm, errors);
             }
 
-            for (int rowNumber = 1; rowNumber < lines.Length; rowNumber++)
+            // Перебор строк
+            for (var rowNumber = 1; rowNumber < lines.Length; rowNumber++)
             {
                 var index = 0;
                 var currStr = lines[rowNumber];
@@ -76,14 +77,15 @@ namespace AlfaRobot.ARobotScript.Compiler
                         continue;
                     }
 
-                    if (!isAgruments && currStr.Length > index)
+                    // Строка с комментарием
+                    if (currStr.Substring(index, currStr.Length - index).StartsWith("#"))
                     {
-                        // Строка с комментарием
-                        if (currStr.Substring(index, currStr.Length - index).StartsWith("#"))
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
+                    // Читаем команду в новой строке
+                    if (!isAgruments)
+                    {
                         // Получаем имя команды в текущей строке
                         currentCommandName = GetCommandNameFromLine(currStr.Substring(index, currStr.Length - index));
 
@@ -158,6 +160,14 @@ namespace AlfaRobot.ARobotScript.Compiler
                             }
                         }
 
+                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.N_STRING)
+                        {
+                            if (currStr[index] != '\"')
+                            {
+                                errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_STRING_OP, rowNumber, index));
+                            }
+                        }
+
                         if (currentCommandArguments[argumentIndex].ValueType == ArgType.INT)
                         {
                             int value = -1;
@@ -171,6 +181,11 @@ namespace AlfaRobot.ARobotScript.Compiler
                         }
 
                         if (currentCommandArguments[argumentIndex].ValueType == ArgType.STR_ARR)
+                        {
+
+                        }
+
+                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.N_STR_ARR)
                         {
 
                         }
@@ -250,18 +265,9 @@ namespace AlfaRobot.ARobotScript.Compiler
         /// <param name="assemblyFileName">Имя файла сборки.</param>
         private static void LoadCommandsFromAssembly(string assemblyFileName)
         {
-            Assembly cmdAssembly;
-
-            try
-            {
-                cmdAssembly = Assembly.LoadFrom(assemblyFileName);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
+            var cmdAssembly = Assembly.LoadFrom(assemblyFileName);
             var types = cmdAssembly.GetTypes();
+
             commandTypes = new List<Type>();
 
             foreach (var t in types)

@@ -15,7 +15,7 @@
         /// </summary>
         private static readonly CommandArgument[] arguments = new CommandArgument[]
         {
-            new CommandArgument("siteNameSlashModuleNames", ArgType.STR_ARR, "Имена модулей, которые не должны удаляться, в формате Сайт/Модуль"),
+            new CommandArgument("siteNameSlashModuleNames", ArgType.N_STR_ARR, "Имена модулей, которые не должны удаляться, в формате Сайт/Модуль"),
         };
 
         /// <summary>
