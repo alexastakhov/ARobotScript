@@ -117,12 +117,19 @@ namespace AlfaRobot.ARobotScript.Compiler
                         }
                         else if (currStr.Length == index || currStr[index] != ')')
                         {
-                            errors.Add(new ErrorRecord(StringConst.ERR_CMD_FORMAT_OP_BRACK, rowNumber, index));
+                            errors.Add(new ErrorRecord(StringConst.ERR_CMD_FORMAT_CLS_BRACK, rowNumber, index));
 
                             continue;
                         }
                         else
                         {
+                            // Добавить проверку последующих символов
+                            var cmdType = GetCommandTypeByName(currentCommandName);
+
+                            programm.Add((ScriptCommand)Activator.CreateInstance(cmdType));
+
+                            Console.WriteLine(programm[0] is BuildConfCommand);
+
                             continue;
                         }
 

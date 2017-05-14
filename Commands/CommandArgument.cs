@@ -27,6 +27,11 @@ namespace AlfaRobot.ARobotScript.Commands
         private readonly string description;
 
         /// <summary>
+        /// Хранит значение свойства <see cref="BaseClass"/>
+        /// </summary>
+        private readonly Type baseClass;
+
+        /// <summary>
         /// Основной конструктор.
         /// </summary>
         /// <param name="name">Имя аргумента.</param>
@@ -37,6 +42,17 @@ namespace AlfaRobot.ARobotScript.Commands
             this.name = name;
             this.valueType = valueType;
             this.description = description;
+
+            switch (valueType)
+            {
+                case ArgType.STRING:
+                case ArgType.N_STRING: baseClass = typeof(string); break;
+                case ArgType.STR_ARR:
+                case ArgType.N_STR_ARR: baseClass = typeof(string[]); break;
+                case ArgType.INT: baseClass = typeof(Int32); break;
+                case ArgType.BOOL: baseClass = typeof(bool); break;
+                default: baseClass = null; break;
+            }
         }
 
         /// <summary>
@@ -69,6 +85,14 @@ namespace AlfaRobot.ARobotScript.Commands
             get
             {
                 return description;
+            }
+        }
+
+        public Type BaseClass
+        {
+            get
+            {
+                return baseClass;
             }
         }
     }

@@ -12,6 +12,47 @@ namespace AlfaRobot.ARobotScript.Commands
     public abstract class ScriptCommand
     {
         /// <summary>
+        /// 
+        /// </summary>
+        protected object[] values = null;
+
+        /// <summary>
+        /// Конструктор по умолчанию.
+        /// </summary>
+        public ScriptCommand()
+        {
+        }
+
+        /// <summary>
+        /// Конструктор с аргументами команды.
+        /// </summary>
+        /// <param name="values">Аргументы команды.</param>
+        public ScriptCommand(object[] values)
+        {
+            this.values = values;
+        }
+
+        /// <summary>
+        /// Проверка правильности аргументов команды.
+        /// </summary>
+        /// <param name="values">Аргументы команды.</param>
+        protected void CheckArgumentValues(object[] values)
+        {
+            if (values.Length != Arguments.Length)
+            {
+                throw new ArgumentException(ErrorConst.ERR_ARGUMENT_NUM);
+            }
+
+            for (int i = 0; i < Arguments.Length; i++)
+            {
+                if (!Arguments[i].BaseClass.IsInstanceOfType(values[i]))
+                {
+                    throw new ArgumentException(string.Format(ErrorConst.ERR_ARGUMENT_TYPE, i));
+                }
+            }
+        }
+
+        /// <summary>
         /// Имя команды.
         /// </summary>
         public static string Name

@@ -28,6 +28,15 @@ namespace AlfaRobot.ARobotScript.Commands
         };
 
         /// <summary>
+        /// Основной конструктор.
+        /// </summary>
+        /// <param name="values">Аргументы команды.</param>
+        public AddModuleCommand(object[] values) : base(values)
+        {
+            CheckArgumentValues(values);
+        }
+
+        /// <summary>
         /// Аргументы команды.
         /// </summary>
         public new static CommandArgument[] Arguments
@@ -46,6 +55,50 @@ namespace AlfaRobot.ARobotScript.Commands
             get
             {
                 return name;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string SiteNameSlashModuleName
+        {
+            get
+            {
+                return (string)values[0];
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ModuleType
+        {
+            get
+            {
+                return (string)values[1];
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CreateRules
+        {
+            get
+            {
+                return (bool)values[2];
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool CreateModule
+        {
+            get
+            {
+                return (bool)values[3];
             }
         }
     }
