@@ -32,6 +32,9 @@ namespace AlfaRobot.ARobotScript.Tests
             Assert.AreEqual(false, command.CreateModule);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), ErrorConst.ERR_ARGUMENT_NUM)]
         public void AddModuleCommandInvalidNumOfArguments()
@@ -46,6 +49,9 @@ namespace AlfaRobot.ARobotScript.Tests
             var command = new AddModuleCommand(values);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void AddModuleCommandInvalidTypeOfArgument()
@@ -57,6 +63,16 @@ namespace AlfaRobot.ARobotScript.Tests
             object[] values = new object[] { modName, modInt, flag1, flag2 };
 
             var command = new AddModuleCommand(values);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), ErrorConst.ERR_ARGUMENT_NULL)]
+        public void AddModuleCommandArgumentsIsNull()
+        {
+            var command = new AddModuleCommand(null);
         }
     }
 }

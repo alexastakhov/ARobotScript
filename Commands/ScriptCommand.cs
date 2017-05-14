@@ -38,6 +38,11 @@ namespace AlfaRobot.ARobotScript.Commands
         /// <param name="values">Аргументы команды.</param>
         protected void CheckArgumentValues(CommandArgument[] args)
         {
+            if (this.values == null)
+            {
+                throw new ArgumentException(ErrorConst.ERR_ARGUMENT_NULL);
+            }
+
             if (this.values.Length != args.Length)
             {
                 throw new ArgumentException(ErrorConst.ERR_ARGUMENT_NUM);

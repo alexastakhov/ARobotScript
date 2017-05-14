@@ -17,5 +17,10 @@ namespace AlfaRobot.ARobotScript.Commands
         /// 
         /// </summary>
         public const string ERR_ARGUMENT_TYPE = "Неправильный тип аргумента #{0}.";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ERR_ARGUMENT_NULL = "Аргументы команды не могут иметь значение Null";
     }
 }
