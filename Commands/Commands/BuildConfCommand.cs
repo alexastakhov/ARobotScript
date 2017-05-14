@@ -16,6 +16,13 @@
         private static readonly CommandArgument[] arguments = new CommandArgument[] { };
 
         /// <summary>
+        /// Конструктор по умолчанию.
+        /// </summary>
+        public BuildConfCommand()
+        {
+        }
+
+        /// <summary>
         /// Аргументы команды.
         /// </summary>
         public new static CommandArgument[] Arguments

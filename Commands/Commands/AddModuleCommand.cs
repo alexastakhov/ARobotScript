@@ -33,7 +33,7 @@ namespace AlfaRobot.ARobotScript.Commands
         /// <param name="values">Аргументы команды.</param>
         public AddModuleCommand(object[] values) : base(values)
         {
-            CheckArgumentValues(values);
+            CheckArgumentValues(arguments);
         }
 
         /// <summary>

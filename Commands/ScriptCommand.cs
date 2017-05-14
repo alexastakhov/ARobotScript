@@ -26,7 +26,7 @@ namespace AlfaRobot.ARobotScript.Commands
         /// <summary>
         /// Конструктор с аргументами команды.
         /// </summary>
-        /// <param name="values">Аргументы команды.</param>
+        /// <param name="values">Значения аргументов команды.</param>
         public ScriptCommand(object[] values)
         {
             this.values = values;
@@ -36,16 +36,16 @@ namespace AlfaRobot.ARobotScript.Commands
         /// Проверка правильности аргументов команды.
         /// </summary>
         /// <param name="values">Аргументы команды.</param>
-        protected void CheckArgumentValues(object[] values)
+        protected void CheckArgumentValues(CommandArgument[] args)
         {
-            if (values.Length != Arguments.Length)
+            if (this.values.Length != args.Length)
             {
                 throw new ArgumentException(ErrorConst.ERR_ARGUMENT_NUM);
             }
 
-            for (int i = 0; i < Arguments.Length; i++)
+            for (int i = 0; i < args.Length; i++)
             {
-                if (!Arguments[i].BaseClass.IsInstanceOfType(values[i]))
+                if (!args[i].BaseClass.IsInstanceOfType(this.values[i]))
                 {
                     throw new ArgumentException(string.Format(ErrorConst.ERR_ARGUMENT_TYPE, i));
                 }
