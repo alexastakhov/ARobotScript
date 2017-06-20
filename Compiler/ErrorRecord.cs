@@ -74,12 +74,12 @@ namespace AlfaRobot.ARobotScript.Compiler
         /// <returns>Строковое представление ошибки.</returns>
         public override string ToString()
         {
-            if (rowNumber > 0)
-            {
+            //if (rowNumber > 0)
+            //{
                 return string.Format("{0} [строка: {1}, столбец: {2}]", ErrorText, rowNumber + 1, columnNumber + 1);
-            }
+            //}
 
-            return errorText;
+            //return errorText;
         }
     }
 }

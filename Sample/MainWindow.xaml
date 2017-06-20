@@ -13,7 +13,7 @@
             @AlfaScript
         </TextBox>
         <GridSplitter Grid.Row="1" Height="3"></GridSplitter>
-        <TextBox x:Name="logBox" Grid.Row="2" VerticalScrollBarVisibility="Visible"></TextBox>
+        <TextBox x:Name="logBox" Grid.Row="2" VerticalScrollBarVisibility="Visible" IsReadOnly="True"></TextBox>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Width="90" Height="25" Margin="10,10,15,10" Click="Button_Click">Compile</Button>
         </StackPanel>

@@ -23,6 +23,199 @@ namespace AlfaRobot.ARobotScript.Compiler
         /// </summary>
         private static List<Type> commandTypes;
 
+        /////// <summary>
+        /////// Метод компиляции.
+        /////// </summary>
+        /////// <param name="script">Текст скрипта.</param>
+        /////// <returns>Результат компиляции.</returns>
+        ////public static CompileResult Compile(string script)
+        ////{
+        ////    var programm = new List<ScriptCommand>();
+        ////    var errors = new List<ErrorRecord>();
+
+        ////    var isTextBlock = false;
+        ////    var isAgruments = false;
+        ////    var argumentIndex = -1;
+
+        ////    var currentCommandName = string.Empty;
+        ////    CommandArgument[] currentCommandArguments = null;
+
+        ////    try
+        ////    {
+        ////        LoadCommandsFromAssembly(CMD_ASSEMBLY);
+        ////    }
+        ////    catch (Exception e)
+        ////    {
+        ////        errors.Add(new ErrorRecord(string.Format("{0} ({1})", StringConst.ERR_LOAD_CMD_ASSEMBLY, e.Message)));
+
+        ////        return new CompileResult(programm, errors);
+        ////    }
+
+        ////    var lines = PrepareLines(script);
+
+        ////    // Проверяем корректность заголовка
+        ////    if (lines[0] != StringConst.HEADER)
+        ////    {
+        ////        errors.Add(new ErrorRecord(StringConst.ERR_INCORR_HEADER));
+
+        ////        return new CompileResult(programm, errors);
+        ////    }
+
+        ////    // Перебор строк
+        ////    for (var rowNumber = 1; rowNumber < lines.Length; rowNumber++)
+        ////    {
+        ////        var index = 0;
+        ////        var currStr = lines[rowNumber];
+
+        ////        if (!isTextBlock)
+        ////        {
+        ////            index = GetNextCharIndex(currStr, index);
+
+        ////            // Пустая строка
+        ////            if (index < 0)
+        ////            {
+        ////                continue;
+        ////            }
+
+        ////            // Строка с комментарием
+        ////            if (currStr.Substring(index, currStr.Length - index).StartsWith("#"))
+        ////            {
+        ////                continue;
+        ////            }
+
+        ////            // Читаем команду в новой строке
+        ////            if (!isAgruments)
+        ////            {
+        ////                // Получаем имя команды в текущей строке
+        ////                currentCommandName = GetCommandNameFromLine(currStr.Substring(index, currStr.Length - index));
+
+        ////                // Команда не найдена
+        ////                if (string.IsNullOrEmpty(currentCommandName))
+        ////                {
+        ////                    errors.Add(new ErrorRecord(StringConst.ERR_UNKN_COMMAND, rowNumber, index));
+
+        ////                    continue;
+        ////                }
+
+        ////                index += currentCommandName.Length;
+
+        ////                // После имени команды отсутствует скобка
+        ////                if (currStr.Length == index || currStr[index] != '(')
+        ////                {
+        ////                    errors.Add(new ErrorRecord(StringConst.ERR_CMD_FORMAT_OP_BRACK, rowNumber, index));
+
+        ////                    continue;
+        ////                }
+
+        ////                index++;
+        ////                currentCommandArguments = GetCommandArguments(currentCommandName);
+
+        ////                // Определяем количество аргументов
+        ////                if (currentCommandArguments.Length > 0)
+        ////                {
+        ////                    argumentIndex = 0;
+        ////                }
+        ////                else if (currStr.Length == index || currStr[index] != ')')
+        ////                {
+        ////                    errors.Add(new ErrorRecord(StringConst.ERR_CMD_FORMAT_CLS_BRACK, rowNumber, index));
+
+        ////                    continue;
+        ////                }
+        ////                else
+        ////                {
+        ////                    // Добавить проверку последующих символов
+        ////                    var cmdType = GetCommandTypeByName(currentCommandName);
+
+        ////                    programm.Add((ScriptCommand)Activator.CreateInstance(cmdType));
+
+        ////                    Console.WriteLine(programm[0] is BuildConfCommand);
+
+        ////                    continue;
+        ////                }
+
+        ////                // Аргументы с новой строки
+        ////                if (currStr.Length == index)
+        ////                {
+        ////                    isAgruments = true;
+
+        ////                    continue;
+        ////                }
+        ////            }
+
+        ////            // Разбор аргументов
+        ////            index = GetNextCharIndex(currStr, index);
+
+        ////            for (; argumentIndex < currentCommandArguments.Length; argumentIndex++)
+        ////            {
+        ////                if (currentCommandArguments[argumentIndex].ValueType == ArgType.BOOL)
+        ////                {
+        ////                    int value = -1;
+
+        ////                    int.TryParse(currStr[index].ToString(), out value);
+
+        ////                    if (value >= 0)
+        ////                    {
+        ////                        errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_BOOL, rowNumber, index));
+        ////                    }
+        ////                }
+
+        ////                if (currentCommandArguments[argumentIndex].ValueType == ArgType.STRING)
+        ////                {
+        ////                    if (currStr[index] != '\"')
+        ////                    {
+        ////                        errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_STRING_OP, rowNumber, index));
+        ////                    }
+        ////                }
+
+        ////                if (currentCommandArguments[argumentIndex].ValueType == ArgType.N_STRING)
+        ////                {
+        ////                    if (currStr[index] != '\"')
+        ////                    {
+        ////                        errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_STRING_OP, rowNumber, index));
+        ////                    }
+        ////                }
+
+        ////                if (currentCommandArguments[argumentIndex].ValueType == ArgType.INT)
+        ////                {
+        ////                    int value = -1;
+
+        ////                    int.TryParse(currStr[index].ToString(), out value);
+
+        ////                    if (value == -1)
+        ////                    {
+        ////                        errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_INT, rowNumber, index));
+        ////                    }
+        ////                }
+
+        ////                if (currentCommandArguments[argumentIndex].ValueType == ArgType.STR_ARR)
+        ////                {
+
+        ////                }
+
+        ////                if (currentCommandArguments[argumentIndex].ValueType == ArgType.N_STR_ARR)
+        ////                {
+
+        ////                }
+
+        ////                if (currStr.Length == index)
+        ////                {
+        ////                    isAgruments = true;
+
+        ////                    break;
+        ////                }
+        ////            }
+        ////        }
+        ////    }
+
+        ////    if (programm.Count == 0)
+        ////    {
+        ////        errors.Add(new ErrorRecord(StringConst.ERR_NO_COMMANDS));
+        ////    }
+
+        ////    return new CompileResult(programm, errors);
+        ////}
+
+
         /// <summary>
         /// Метод компиляции.
         /// </summary>
@@ -32,12 +225,12 @@ namespace AlfaRobot.ARobotScript.Compiler
         {
             var programm = new List<ScriptCommand>();
             var errors = new List<ErrorRecord>();
-
-            var isTextBlock = false;
-            var isAgruments = false;
-            var argumentIndex = -1;
+            var index = 0;
+            var charIndex = 0;
+            var strings = new List<int>();
 
             var currentCommandName = string.Empty;
+
             CommandArgument[] currentCommandArguments = null;
 
             try
@@ -51,160 +244,37 @@ namespace AlfaRobot.ARobotScript.Compiler
                 return new CompileResult(programm, errors);
             }
 
-            var lines = PrepareLines(script);
-
-            // Проверяем корректность заголовка
-            if (lines[0] != StringConst.HEADER)
+            if (!script.StartsWith(StringConst.HEADER))
             {
-                errors.Add(new ErrorRecord(StringConst.ERR_INCORR_HEADER));
-
-                return new CompileResult(programm, errors);
+                throw new Exception();
             }
 
-            // Перебор строк
-            for (var rowNumber = 1; rowNumber < lines.Length; rowNumber++)
+            index += StringConst.HEADER.Length;
+            charIndex = index;
+
+            for (; index < script.Length; index++)
             {
-                var index = 0;
-                var currStr = lines[rowNumber];
-
-                if (!isTextBlock)
+                if (script[index] == '\r')
                 {
-                    index = GetNextCharIndex(currStr, index);
-
-                    // Пустая строка
-                    if (index < 0)
-                    {
-                        continue;
-                    }
-
-                    // Строка с комментарием
-                    if (currStr.Substring(index, currStr.Length - index).StartsWith("#"))
-                    {
-                        continue;
-                    }
-
-                    // Читаем команду в новой строке
-                    if (!isAgruments)
-                    {
-                        // Получаем имя команды в текущей строке
-                        currentCommandName = GetCommandNameFromLine(currStr.Substring(index, currStr.Length - index));
-
-                        // Команда не найдена
-                        if (string.IsNullOrEmpty(currentCommandName))
-                        {
-                            errors.Add(new ErrorRecord(StringConst.ERR_UNKN_COMMAND, rowNumber, index));
-
-                            continue;
-                        }
-
-                        index += currentCommandName.Length;
-
-                        // После имени команды отсутствует скобка
-                        if (currStr.Length == index || currStr[index] != '(')
-                        {
-                            errors.Add(new ErrorRecord(StringConst.ERR_CMD_FORMAT_OP_BRACK, rowNumber, index));
-
-                            continue;
-                        }
-
-                        index++;
-                        currentCommandArguments = GetCommandArguments(currentCommandName);
-
-                        // Определяем количество аргументов
-                        if (currentCommandArguments.Length > 0)
-                        {
-                            argumentIndex = 0;
-                        }
-                        else if (currStr.Length == index || currStr[index] != ')')
-                        {
-                            errors.Add(new ErrorRecord(StringConst.ERR_CMD_FORMAT_CLS_BRACK, rowNumber, index));
-
-                            continue;
-                        }
-                        else
-                        {
-                            // Добавить проверку последующих символов
-                            var cmdType = GetCommandTypeByName(currentCommandName);
-
-                            programm.Add((ScriptCommand)Activator.CreateInstance(cmdType));
-
-                            Console.WriteLine(programm[0] is BuildConfCommand);
-
-                            continue;
-                        }
-
-                        // Аргументы с новой строки
-                        if (currStr.Length == index)
-                        {
-                            isAgruments = true;
-
-                            continue;
-                        }
-                    }
-
-                    // Разбор аргументов
-                    index = GetNextCharIndex(currStr, index);
-
-                    for (; argumentIndex < currentCommandArguments.Length; argumentIndex++)
-                    {
-                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.BOOL)
-                        {
-                            int value = -1;
-
-                            int.TryParse(currStr[index].ToString(), out value);
-
-                            if (value >= 0)
-                            {
-                                errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_BOOL, rowNumber, index));
-                            }
-                        }
-
-                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.STRING)
-                        {
-                            if (currStr[index] != '\"')
-                            {
-                                errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_STRING_OP, rowNumber, index));
-                            }
-                        }
-
-                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.N_STRING)
-                        {
-                            if (currStr[index] != '\"')
-                            {
-                                errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_STRING_OP, rowNumber, index));
-                            }
-                        }
-
-                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.INT)
-                        {
-                            int value = -1;
-
-                            int.TryParse(currStr[index].ToString(), out value);
-
-                            if (value == -1)
-                            {
-                                errors.Add(new ErrorRecord(StringConst.ERR_ARG_TYPE_INT, rowNumber, index));
-                            }
-                        }
-
-                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.STR_ARR)
-                        {
-
-                        }
-
-                        if (currentCommandArguments[argumentIndex].ValueType == ArgType.N_STR_ARR)
-                        {
-
-                        }
-
-                        if (currStr.Length == index)
-                        {
-                            isAgruments = true;
-
-                            break;
-                        }
-                    }
+                    continue;
                 }
+
+                if (script[index] == '\n')
+                {
+                    strings.Add(charIndex);
+                    charIndex = 0;
+
+                    continue;
+                }
+
+                charIndex++;
+            }
+
+            strings.Add(charIndex);
+
+            for (int i = 0; i < strings.Count; i++)
+            {
+                errors.Add(new ErrorRecord("String", i, strings[i]));
             }
 
             if (programm.Count == 0)
@@ -214,6 +284,9 @@ namespace AlfaRobot.ARobotScript.Compiler
 
             return new CompileResult(programm, errors);
         }
+
+
+
 
         /// <summary>
         /// Получить имя команды в текущей строке.
@@ -254,16 +327,6 @@ namespace AlfaRobot.ARobotScript.Compiler
             }
 
             return beginIndex;
-        }
-
-        /// <summary>
-        /// Разделить текст скрипта на строки.
-        /// </summary>
-        /// <param name="text">Текст скрипта.</param>
-        /// <returns>Массив строк.</returns>
-        private static string[] PrepareLines(string text)
-        {
-            return text.Replace("\r", "").Split('\n');
         }
 
         /// <summary>
